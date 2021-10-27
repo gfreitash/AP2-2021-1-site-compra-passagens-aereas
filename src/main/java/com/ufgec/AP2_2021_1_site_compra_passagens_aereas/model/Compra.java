@@ -1,20 +1,39 @@
 package com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model.ProvedorCartao.CartaoCompra;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
-
+@Entity
 public class Compra {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long codigo;
+    @OneToMany
+    private final List<Passagem> passagens = new ArrayList<>();
+    @ManyToOne
+    private Cartao cartao;
 
-    private List<Bilhete> bilhetes;
-    private CartaoCompra cartao;
-    private long id;
+    public Compra() {
 
-    public Bilhete gerarBilhete() {
-        return null;
+    }
+
+    public Compra(Cartao cartao, Passagem ... passagens) {
+        this.cartao = cartao;
+        Collections.addAll(this.passagens, passagens);
+    }
+
+    public long getCodigo() {
+        return codigo;
+    }
+
+    public List<Passagem> getPassagens() {
+        return passagens;
+    }
+
+    public Cartao getCartao() {
+        return cartao;
     }
 }
