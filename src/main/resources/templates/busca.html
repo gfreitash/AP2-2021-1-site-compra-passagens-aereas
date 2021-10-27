@@ -1,28 +1,88 @@
 <html>
-    <head>
-
-    </head>
-    <body>
-        <div id="resultados">
-            lista de resultados
-            <div id="resultado-1">
+<head>
+    <style>
+        .resultados {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .item-resultado {
+            display: flex;
+            align-items: flex-start;
+            margin: 2% auto;
+        }
+        
+        .ida-volta {
+            margin-right:2%;
+            margin:auto;
+        }
+        
+        .nav-resultado {
+            display: flex;
+            flex-grow:1
+        }
+        
+        .horario-item {
+            display: flex;
+            flex-grow: 1;
+            flex-wrap: wrap;
+            margin-top: 0;
+        }
+        
+        .ida {
+            display: flex;
+            align-content: flex-start;
+        }
+        
+        ul.horario-item li {
+            list-style: none;
+            width:50%;
+        }
+        
+        .selecionar {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="resultados">
+        lista de resultados
+        <div class="item-resultado">
+            <div class="ida-volta">
                 <div class="ida">
-                    <div>data</div>
-                    <div>origem</div>
-                    <div>destino</div>
-                    <div>horario-voo</div>
-                    <div>previsao-chegada</div>
+                    <section class="nav-resultado">
+                        <div>data</div>
+                    </section>
+                    <ul class="horario-item">
+                        <li>origem</li>
+                        <li>destino</li>
+                        <li>horario-voo</li>
+                        <li>previsao-chegada</li>
+                    </ul>
                 </div>
-                <div class=volta>
-                    <div>data</div>
-                    <div>origem</div>
-                    <div>destino</div>
-                    <div>horario-voo</div>
-                    <div>previsao-chegada</div>
+                
+                <div class="ida">
+                    <section class="nav-resultado">
+                        <div>data</div>
+                    </section>
+                    <ul class="horario-item">
+                        <li>destino</li>
+                        <li>origem</li>
+                        <li>horario-voo</li>
+                        <li>previsao-chegada</li>
+                    </ul>
                 </div>
+            </div>
+            
+            <div class="selecionar">
                 preco
                 <button>selecionar</button>
             </div>
+            
         </div>
-    </body>
+    </div>
+</body>
 </html>
