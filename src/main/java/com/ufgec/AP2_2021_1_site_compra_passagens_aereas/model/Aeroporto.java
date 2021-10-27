@@ -1,12 +1,17 @@
 package com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.utils.Haversine;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+@Entity
 public class Aeroporto {
     private final String nome;
+    @Id
     private final String sigla;
     private final String cidade;
     private final String estado;
@@ -17,13 +22,19 @@ public class Aeroporto {
     private final double latitude;
     private final double longitude;
 
-    /**
-     * Nesta variável estão armazenados todos os aeroportos válidos(criados)
-     */
-    private static final SortedMap<String, Aeroporto> AEROPORTOS = new TreeMap<>();
+    public Aeroporto() {
+        nome = "";
+        sigla = "";
+        cidade = "";
+        estado = "";
+        siglaEstado = "";
 
-    private Aeroporto(String nome, String sigla, String cidade, String estado, String siglaEstado,
-                      int numeroPassageirosAno, double latitude, double longitude) {
+        latitude = 0.;
+        longitude = 0.;
+    }
+
+    public Aeroporto(String nome, String sigla, String cidade, String estado, String siglaEstado,
+                     int numeroPassageirosAno, double latitude, double longitude) {
         this.nome = nome;
         this.sigla = sigla;
         this.cidade = cidade;
@@ -52,6 +63,11 @@ public class Aeroporto {
         return siglaEstado;
     }
 
+
+    /*public List<Voo> getVoosParaAqui() {
+        return voosParaAqui;
+    }*/
+
     /**
      * Este método retifica a quantidade de passageiros anuais de um aeroporto para um valor menor usando uma fórmula
      * arbitrária, tornando a quantidade de voos que serão gerados mais acessível.
@@ -63,8 +79,14 @@ public class Aeroporto {
             return (int) (50 * Math.sqrt(15 * numeroPassageirosAno));
     }
 
-    public double calcularDistancia() {
-        return 0.0;
+    /**
+     * Este método calcula a distância entre dois aeroportos a partir
+     * da fórmula de Haversine
+     * @param outroAeroporto é o outro aeroporto que será medida a distância
+     * @return distância entre dois aeroportos;
+     */
+    public double distancia(Aeroporto outroAeroporto) {
+        return Haversine.distance(this.latitude, this.longitude, outroAeroporto.latitude, outroAeroporto.longitude);
     }
 
     public List<Voo> voosDaquiParaNumIntervalo(Aeroporto para, LocalDateTime dataInicial, LocalDateTime dataFinal) {
@@ -74,5 +96,4 @@ public class Aeroporto {
     public List<Voo> voosParaAquiDeNumIntervalo(Aeroporto de, LocalDateTime dataInicial, LocalDateTime dataFinal) {
         return null;
     }
-
 }

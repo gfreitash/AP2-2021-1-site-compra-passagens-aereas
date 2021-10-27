@@ -1,44 +1,59 @@
 package com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
 public class Voo {
-    private final Aeroporto localOrigem;
-    private final Aeroporto localDestino;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private final LocalDateTime horarioPartida;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private final LocalDateTime previsaoChegada;
 
-    private final Map<Integer, Passageiro> poltronas;
-    private long id;
+    @ManyToOne
+    private final Aeroporto origem;
+    @ManyToOne
+    private final Aeroporto destino;
 
-    Voo(Aeroporto localOrigem, Aeroporto localDestino, LocalDateTime horarioPartida) {
-        this.localOrigem = localOrigem;
-        this.localDestino = localDestino;
-        this.horarioPartida = horarioPartida;
+    //private final Map<Integer, Passageiro> poltronas;
+
+    public Voo(){
+        horarioPartida = null;
         previsaoChegada = null;
-
-        poltronas = new HashMap<>();
-        id = 0;
+        origem = null;
+        destino = null;
     }
 
-    public Aeroporto getLocalOrigem() {
-        return localOrigem;
+    public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime horarioPartida) {
+        this.origem = origem;
+        this.destino = destino;
+        this.horarioPartida = horarioPartida;
+        previsaoChegada = calcularPrevisaoChegada();
     }
-    public Aeroporto getLocalDestino() {
-        return localDestino;
+
+    private LocalDateTime calcularPrevisaoChegada() {
+        long tempoViagemMinutos = (long) ((origem.distancia(destino)/950) * 60);
+        return horarioPartida.plusMinutes(tempoViagemMinutos);
     }
+
     public LocalDateTime getHorarioPartida() {
         return horarioPartida;
     }
     public LocalDateTime getPrevisaoChegada() {
         return previsaoChegada;
     }
-    public Map<Integer, Passageiro> getPoltronas() {
-        return poltronas;
+    public Aeroporto getOrigem() {
+        return origem;
     }
+    public Aeroporto getDestino() {
+        return destino;
+    }
+
     public long getId() {
         return id;
     }
