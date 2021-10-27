@@ -1,9 +1,12 @@
 package com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.service.CrudVooService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +23,8 @@ public class Voo {
     @ManyToOne
     private final Aeroporto destino;
 
+    @Autowired
+    private static CrudVooService crudVooService;
     //private final Map<Integer, Passageiro> poltronas;
 
     public Voo(){
@@ -80,4 +85,10 @@ public class Voo {
     public int hashCode() {
         return Objects.hash(horarioPartida, previsaoChegada, origem, destino);
     }
+
+    public void reservarPoltrona(Passageiro passageiro, int numeroPoltrona) {
+        crudVooService.reservarPoltrona(this, passageiro, numeroPoltrona);
+    }
+
+
 }

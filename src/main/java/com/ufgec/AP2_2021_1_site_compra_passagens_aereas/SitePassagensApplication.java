@@ -1,24 +1,28 @@
 package com.ufgec.AP2_2021_1_site_compra_passagens_aereas;
 
 import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model.Aeroporto;
+import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model.Passageiro;
 import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.model.Voo;
-import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.repository.AeroportoRepository;
-import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.repository.VooRepository;
+import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class SitePassagensApplication implements CommandLineRunner {
     private final VooRepository vooRepository;
     private final AeroportoRepository aeroportoRepository;
+    private final PassageiroRepository passageiroRepository;
 
-    public SitePassagensApplication(VooRepository vooRepository, AeroportoRepository aeroportoRepository) {
+    public SitePassagensApplication(VooRepository vooRepository, AeroportoRepository aeroportoRepository, PassageiroRepository passageiroRepository) {
         this.vooRepository = vooRepository;
         this.aeroportoRepository = aeroportoRepository;
+        this.passageiroRepository = passageiroRepository;
     }
+
 
     public static void main(String[] args) {
         SpringApplication.run(SitePassagensApplication.class, args);
@@ -36,8 +40,12 @@ public class SitePassagensApplication implements CommandLineRunner {
 
         Voo voo = new Voo(goiania, brasilia, LocalDateTime.now());
         vooRepository.save(voo);
-        aeroportoRepository.save(goiania);
-        aeroportoRepository.save(brasilia);
+
+        Passageiro passageiro1 = new Passageiro("Carlos", "Massa",
+                LocalDate.of(1950, 12, 24));
+        passageiroRepository.save(passageiro1);
+
+        voo.reservarPoltrona(passageiro1, 128);
 
     }
 }
