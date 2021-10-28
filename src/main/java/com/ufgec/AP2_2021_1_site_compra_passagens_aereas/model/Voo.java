@@ -23,10 +23,6 @@ public class Voo {
     @ManyToOne
     private final Aeroporto destino;
 
-    @Autowired
-    private static CrudVooService crudVooService;
-    //private final Map<Integer, Passageiro> poltronas;
-
     public Voo(){
         horarioPartida = null;
         previsaoChegada = null;
@@ -84,10 +80,6 @@ public class Voo {
     @Override
     public int hashCode() {
         return Objects.hash(horarioPartida, previsaoChegada, origem, destino);
-    }
-
-    public void reservarPoltrona(Passageiro passageiro, int numeroPoltrona) {
-        crudVooService.reservarPoltrona(this, passageiro, numeroPoltrona);
     }
 
 

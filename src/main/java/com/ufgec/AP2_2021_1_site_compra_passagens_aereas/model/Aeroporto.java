@@ -4,12 +4,12 @@ import com.ufgec.AP2_2021_1_site_compra_passagens_aereas.utils.Haversine;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class Aeroporto {
+public class Aeroporto implements Comparable<Aeroporto>{
     private final String nome;
     @Id
     private final String sigla;
@@ -40,7 +40,7 @@ public class Aeroporto {
         this.cidade = cidade;
         this.estado = estado;
         this.siglaEstado = siglaEstado;
-        this.numeroPassageirosAno = retificarNumeroPassageirosAno(numeroPassageirosAno);
+        this.numeroPassageirosAno = numeroPassageirosAno;
 
         this.latitude = latitude;
         this.longitude = longitude;
@@ -62,8 +62,12 @@ public class Aeroporto {
     public String getSiglaEstado() {
         return siglaEstado;
     }
-
-
+    public int getNumeroPassageirosAno() {
+        return numeroPassageirosAno;
+    }
+    public int getNumeroPassageirosAnoRetificado() {
+        return retificarNumeroPassageirosAno(numeroPassageirosAno);
+    }
     /*public List<Voo> getVoosParaAqui() {
         return voosParaAqui;
     }*/
@@ -73,10 +77,10 @@ public class Aeroporto {
      * arbitrária, tornando a quantidade de voos que serão gerados mais acessível.
      */
     private int retificarNumeroPassageirosAno(int numeroPassageirosAno) {
-        if (numeroPassageirosAno <= 37500)
+        if (numeroPassageirosAno <= 350000)
             return numeroPassageirosAno;
         else
-            return (int) (50 * Math.sqrt(15 * numeroPassageirosAno));
+            return (numeroPassageirosAno/30) + (int) (50 * Math.sqrt(25 * numeroPassageirosAno));
     }
 
     /**
@@ -95,5 +99,26 @@ public class Aeroporto {
 
     public List<Voo> voosParaAquiDeNumIntervalo(Aeroporto de, LocalDateTime dataInicial, LocalDateTime dataFinal) {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Aeroporto aeroporto)) return false;
+        return sigla.equals(aeroporto.sigla);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sigla);
+    }
+
+    @Override
+    public int compareTo(Aeroporto o) {
+        return Comparator.comparing(Aeroporto::getNumeroPassageirosAno)
+                .thenComparing(Aeroporto::getSigla)
+                .thenComparing(Aeroporto::getEstado)
+                .thenComparing(Aeroporto::getCidade)
+                .compare(this, o);
     }
 }
